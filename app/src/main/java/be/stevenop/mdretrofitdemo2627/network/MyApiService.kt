@@ -1,14 +1,18 @@
 package be.stevenop.mdretrofitdemo2627.network
 
 import be.stevenop.mdretrofitdemo2627.data.CategorieenResponse
-import be.stevenop.mdretrofitdemo2627.data.DeleteResponse
+import be.stevenop.mdretrofitdemo2627.data.ProductDeleteResponse
+import be.stevenop.mdretrofitdemo2627.data.Product
+import be.stevenop.mdretrofitdemo2627.data.ProductAddResponse
 import be.stevenop.mdretrofitdemo2627.data.ProductenResponse
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 /**
@@ -42,7 +46,12 @@ interface MyApiService {
     @DELETE("producten/{id}")
     suspend fun deleteProduct(
         @Path("id") id: Long
-    ) : DeleteResponse
+    ) : ProductDeleteResponse
+
+    @POST("producten")
+    suspend fun addProduct(
+        @Body() product : Product
+    ) : ProductAddResponse
 
     @GET("categorieen")
     suspend fun getCategorieen() : CategorieenResponse
