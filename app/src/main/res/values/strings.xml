@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MD Retrofit Demo 2627</string>
+    <string name="get_producten">Get Producten</string>
+    <string name="test_login">Test Login</string>
+    <string name="no_products_fetched_yet">No Products fetched (yet)</string>
+    <string name="delete_product">Delete product</string>
+    delete_product
+</resources>
