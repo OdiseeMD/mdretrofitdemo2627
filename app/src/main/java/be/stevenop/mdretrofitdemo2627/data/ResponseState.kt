@@ -5,5 +5,6 @@ data class ResponseState (
     val productenResponse: String = "",
     val categorieenResponse: String = "",
     val deleteResponse: String ="",
+    val addProductResponse: String = "",
     val output: String = ""
 )

@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ProductAddResponse (
     val status: Long,
-    val message: String?,
-    val missingFields: List<String>?
+    val message: String,
+    val missingFields: List<String>? = null,
 )

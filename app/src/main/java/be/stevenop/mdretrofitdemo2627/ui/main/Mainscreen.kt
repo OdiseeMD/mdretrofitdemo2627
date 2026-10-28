@@ -31,7 +31,7 @@ import be.stevenop.mdretrofitdemo2627.ui.theme.MDRetrofitDemo2627Theme
 
 @Composable
 fun ButtonsRow(
-    onLoginClicked : ()-> Unit,
+    onAddProductClicked : ()-> Unit,
     onGetProductenClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -43,11 +43,11 @@ fun ButtonsRow(
 
     ) {
         Button(
-            onClick = onLoginClicked,
+            onClick = onAddProductClicked,
             elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 4.dp, pressedElevation = 2.dp),
             modifier = Modifier.weight(1f)
         ){
-            Text(stringResource(R.string.test_login))
+            Text(stringResource(R.string.nieuw_product))
         }
 
         Spacer( modifier = Modifier.weight(0.2f) )
@@ -103,7 +103,7 @@ fun TestPostApp(
             modifier = Modifier.weight(5f)
         )
         ButtonsRow(
-            onLoginClicked = {  },
+            onAddProductClicked = { viewModel.addProduct() },
             onGetProductenClicked = { viewModel.getProducten() } ,
             Modifier.weight(1f)
         )

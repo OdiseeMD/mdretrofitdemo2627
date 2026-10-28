@@ -146,6 +146,13 @@ class MainViewModel : ViewModel() {
                             data = it.data.filter { productItem -> productItem.id != product.id }
                         )
                     }
+                } else {
+                    // we tonen toch even wat de API teruggeeft
+                    _responseState.update {
+                        it.copy(
+                            output = deleteResult.toString()
+                        )
+                    }
                 }
 
                 _responseState.update {
@@ -164,5 +171,55 @@ class MainViewModel : ViewModel() {
             }
         }
     }
+
+    fun generateProduct(): Product {
+        // id wordt niet gebruikt voor post, maar de stoppen deze in de variabele om
+        // aan omschrijving toe te voegen.
+        val newId = (10000..20000).random().toLong()
+        return Product(
+            id=newId,
+            categorieId = (1..5).random().toLong(),
+            omschrijving = "Nieuw product ($newId)",
+            prijs = (10..10000).random().toFloat() / 10f
+        )
+    }
+
+    fun addProduct() {
+        val product = generateProduct()
+
+        viewModelScope.launch {
+            try {
+                val addResult = MyApi.retroFitService.addProduct(product)
+                if (addResult.status in 200..299) {
+                    _productenUIState.update {
+                        it.copy(
+                            data = it.data + product
+                        )
+                    }
+                    _responseState.update {
+                        it.copy(
+                            addProductResponse = addResult.toString(),
+                            output = addResult.toString()
+                        )
+                    }
+                } else {
+                    // we tonen toch even wat de API teruggeeft
+                    _responseState.update {
+                        it.copy(
+                            addProductResponse = addResult.toString(),
+                            output = addResult.toString()
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("addProduct", e.toString())
+                _responseState.update {
+                    it.copy(
+                        output = e.toString()
+                    )
+                }
+            }
+        }
+            }
 
 }
