@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.stevenop.mdretrofitdemo2627.data.CategorieUIState
 import be.stevenop.mdretrofitdemo2627.data.Product
+import be.stevenop.mdretrofitdemo2627.data.ProductDeleteResponse
 import be.stevenop.mdretrofitdemo2627.data.ProductenUIState
 import be.stevenop.mdretrofitdemo2627.data.ResponseState
 import be.stevenop.mdretrofitdemo2627.network.MyApi
@@ -14,6 +15,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import retrofit2.HttpException
 
 class MainViewModel : ViewModel() {
     // State, simple as Strings in ResponseState
@@ -159,6 +162,16 @@ class MainViewModel : ViewModel() {
                     it.copy(
                         deleteResponse = deleteResult.toString(),
                         output = deleteResult.toString()
+                    )
+                }
+            } catch (e: HttpException) {
+                Log.e("deleteProduct", e.toString())
+                val response = e.response()?.errorBody()?.string()
+                    ?.let { Json.decodeFromString<ProductDeleteResponse>(it) }
+
+                _responseState.update {
+                    it.copy(
+                        output = "statuscode: ${e.response()?.code().toString()} \nmessage: ${response?.message.toString()}"
                     )
                 }
             } catch (e: Exception) {
