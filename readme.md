@@ -2,7 +2,7 @@
 
 Deze demo werkt met een 2e versie van de API die we vorig jaar tijdens de module Dynamic Web Development hebben gebruikt.
 
-Die API kan gevonden worden op http://127.0.0.1:5500/dwd/market/v2/
+Die API kan gevonden worden op https://stevenop.be/market/v2/
 
 Deze demo demonstreert het ophalen van gegevens, het toevoegen en het verwijderen van producten. 
 
