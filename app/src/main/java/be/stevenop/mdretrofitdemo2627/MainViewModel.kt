@@ -51,7 +51,7 @@ class MainViewModel : ViewModel() {
             try {
                 val productenResponse = MyApi.retroFitService.getProducten()
 
-                if(productenResponse.status in 200..299 && !productenResponse.data.isEmpty()) {
+                if(productenResponse.status in 200..299) {
                     // zet de nieuwe Producten in _productenUIState
                     _productenUIState.update {
                         it.copy(
@@ -60,15 +60,26 @@ class MainViewModel : ViewModel() {
                     }
 
                     // de output aanpassen (voor het bovenste deel)
-                    _responseState.update { currentState ->
-                        currentState.copy(
+                    _responseState.update {
+                        it.copy(
                             productenResponse = productenResponse.data.size.toString(),
+                            output = productenResponse.toString()
+                        )
+                    }
+                } else {
+                    _responseState.update {
+                        it.copy(
                             output = productenResponse.toString()
                         )
                     }
                 }
             } catch(e: Exception) {
                 Log.e("getProducten", e.toString())
+                _responseState.update {
+                    it.copy(
+                        output = e.toString()
+                    )
+                }
             }
 
 
@@ -85,8 +96,8 @@ class MainViewModel : ViewModel() {
             try {
                 val categorieenResponse = MyApi.retroFitService.getCategorieen()
 
-                if(categorieenResponse.status in 200..299 && !categorieenResponse.data.isEmpty()) {
-                    // zet de nieuwe Producten in _productenUIState
+                if(categorieenResponse.status in 200..299) {
+                    // zet de nieuwe Categorieën in _categorieenUIState
                     _categorieenUIState.update {
                         it.copy(
                             data = categorieenResponse.data
@@ -94,15 +105,26 @@ class MainViewModel : ViewModel() {
                     }
 
                     // de output aanpassen (voor het bovenste deel)
-                    _responseState.update { currentState ->
-                        currentState.copy(
+                    _responseState.update {
+                        it.copy(
                             categorieenResponse = categorieenResponse.data.size.toString(),
+                            output = categorieenResponse.toString()
+                        )
+                    }
+                } else {
+                    _responseState.update {
+                        it.copy(
                             output = categorieenResponse.toString()
                         )
                     }
                 }
             } catch(e: Exception) {
                 Log.e("getCategorieen", e.toString())
+                _responseState.update {
+                    it.copy(
+                        output = e.toString()
+                    )
+                }
             }
 
 
@@ -115,20 +137,30 @@ class MainViewModel : ViewModel() {
     }
     fun deleteProduct(product: Product) {
         viewModelScope.launch {
+            try {
+                val deleteResult = MyApi.retroFitService.deleteProduct(product.id)
 
-            val deleteResult = MyApi.retroFitService.deleteProduct(product.id)
+                if (deleteResult.status in 200..299) {
+                    _productenUIState.update {
+                        it.copy(
+                            data = it.data.filter { productItem -> productItem.id != product.id }
+                        )
+                    }
+                }
 
-            _responseState.update { currentState ->
-                currentState.copy(
-                    deleteResponse = deleteResult.toString(),
-                    output = deleteResult.toString()
-                )
-            }
-
-            _productenUIState.update {
-                it.copy(
-                    data = it.data.filter { it.id != product.id }
-                )
+                _responseState.update {
+                    it.copy(
+                        deleteResponse = deleteResult.toString(),
+                        output = deleteResult.toString()
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e("deleteProduct", e.toString())
+                _responseState.update {
+                    it.copy(
+                        output = e.toString()
+                    )
+                }
             }
         }
     }
